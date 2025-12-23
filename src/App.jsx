@@ -1,0 +1,33 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Events from './pages/Events';
+import EventDetail from './pages/EventDetail';
+import UploadMedia from './pages/admin/UploadMedia';
+import ListMedia from './pages/admin/ListMedia';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import Thanks from './pages/Thanks';
+
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Público */}
+        <Route path="/" element={<Events />} />
+        <Route path="/event/:id" element={<EventDetail />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/thanks/:orderId" element={<Thanks />} />
+
+
+
+        {/* Admin (sin auth todavía) */}
+        <Route path="/admin/upload" element={<UploadMedia />} />
+        <Route path="/admin/media" element={<ListMedia />} />
+        
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
