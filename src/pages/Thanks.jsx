@@ -9,7 +9,7 @@ export default function Thanks() {
   const [status, setStatus] = useState('loading'); // loading | ok | pending | error
 
   useEffect(() => {
-    fetch(`${API_URL}/orders${orderId}/thanks`)
+    fetch(`${API_URL}/orders/${orderId}/thanks`)
       .then(async (res) => {
         if (res.status === 403) {
           setStatus('pending');
