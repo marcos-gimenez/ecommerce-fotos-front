@@ -24,6 +24,8 @@ function App() {
         {/* Admin (sin auth todavía) */}
         <Route path="/admin/upload" element={<UploadMedia />} />
         <Route path="/admin/media" element={<ListMedia />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminDashboard />} />
         
       </Routes>
     </BrowserRouter>
