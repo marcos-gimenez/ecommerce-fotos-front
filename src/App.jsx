@@ -6,6 +6,7 @@ import ListMedia from './pages/admin/ListMedia';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Thanks from './pages/Thanks';
+import AdminLogin from './pages/admin/Login';
 
 
 function App() {
