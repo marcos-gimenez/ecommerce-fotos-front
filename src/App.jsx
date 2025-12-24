@@ -8,6 +8,7 @@ import Checkout from './pages/Checkout';
 import Thanks from './pages/Thanks';
 import AdminLogin from './pages/admin/Login';
 import AdminDashboard from './pages/admin/Dashboard';
+import Sales from './pages/admin/Sales';
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         <Route path="/admin/media" element={<ListMedia />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/sales" element={<Sales />} />
         
       </Routes>
     </BrowserRouter>
