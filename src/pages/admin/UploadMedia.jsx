@@ -1,41 +1,43 @@
-import { useEffect, useState } from 'react';
-import { getEvents } from '../../api/events';
-import { uploadMedia } from '../../api/media';
+import { useEffect, useState } from "react";
+import { getEvents } from "../../api/events";
+import { uploadMedia } from "../../api/media";
 
 export default function UploadMedia() {
   const [events, setEvents] = useState([]);
-  const [eventId, setEventId] = useState('');
-  const [file, setFile] = useState(null);
-  const [price, setPrice] = useState('');
+  const [eventId, setEventId] = useState("");
+  const [files, setFiles] = useState([]);
+  const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     getEvents()
       .then(setEvents)
-      .catch(() => setMessage('Error cargando eventos'));
+      .catch(() => setMessage("Error cargando eventos"));
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('');
+    setMessage("");
 
-    if (!eventId || !file) {
-      setMessage('Seleccioná evento y archivo');
+    if (!eventId || files.length === 0) {
+      setMessage("Seleccioná evento y archivo");
       return;
     }
 
     const formData = new FormData();
-    formData.append('event', eventId);
-    formData.append('file', file);
-    formData.append('price', price || 0);
+    formData.append("event", eventId);
+    files.forEach((file) => {
+      formData.append("files", file);
+    });
+    formData.append("price", price || 0);
 
     try {
       setLoading(true);
       await uploadMedia(formData);
-      setMessage('✅ Archivo subido correctamente');
-      setFile(null);
-      setPrice('');
+      setMessage("✅ ${files.length} archivos subidos correctamente");
+      setFiles([]);
+      setPrice("");
     } catch (err) {
       setMessage(err.message);
     } finally {
@@ -44,16 +46,13 @@ export default function UploadMedia() {
   };
 
   return (
-    <div style={{ maxWidth: 500, margin: '40px auto' }}>
+    <div style={{ maxWidth: 500, margin: "40px auto" }}>
       <h2>Subir foto / video</h2>
 
       <form onSubmit={handleSubmit}>
         <div>
           <label>Evento</label>
-          <select
-            value={eventId}
-            onChange={(e) => setEventId(e.target.value)}
-          >
+          <select value={eventId} onChange={(e) => setEventId(e.target.value)}>
             <option value="">Seleccionar evento</option>
             {events.map((ev) => (
               <option key={ev._id} value={ev._id}>
@@ -67,8 +66,9 @@ export default function UploadMedia() {
           <label>Archivo</label>
           <input
             type="file"
+            multiple
             accept="image/*,video/*"
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={(e) => setFiles(Array.from(e.target.files))}
           />
         </div>
 
@@ -82,7 +82,7 @@ export default function UploadMedia() {
         </div>
 
         <button type="submit" disabled={loading}>
-          {loading ? 'Subiendo...' : 'Subir'}
+          {loading ? "Subiendo..." : "Subir"}
         </button>
       </form>
 
