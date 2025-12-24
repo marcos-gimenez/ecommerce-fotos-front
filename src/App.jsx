@@ -7,6 +7,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Thanks from './pages/Thanks';
 import AdminLogin from './pages/admin/Login';
+import AdminDashboard from './pages/admin/Dashboard';
 
 
 function App() {
