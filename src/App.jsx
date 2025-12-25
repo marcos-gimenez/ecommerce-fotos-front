@@ -9,6 +9,7 @@ import Thanks from './pages/Thanks';
 import AdminLogin from './pages/admin/Login';
 import AdminDashboard from './pages/admin/Dashboard';
 import Sales from './pages/admin/Sales';
+import './styles/theme.css';
 
 
 function App() {
