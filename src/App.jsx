@@ -18,8 +18,9 @@ import './styles/theme.css';
 function App() {
   return (
     <BrowserRouter>
+    <div className="app">
       <Header />
-      
+
       <Routes>
         {/* Público */}
         <Route path="/" element={<Events />} />
@@ -40,6 +41,7 @@ function App() {
       </Routes>
 
       <Footer />
+      </div>
     </BrowserRouter>
   );
 }

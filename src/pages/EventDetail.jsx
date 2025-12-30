@@ -38,24 +38,7 @@ export default function EventDetail() {
           gap: 16,
         }}
       >
-        {media.map((m) => (
-          // <div key={m._id}>
-          //   {m.resource_type === 'image' ? (
-          //     <img
-          //       src={m.secure_url}
-          //       alt=""
-          //       style={{ width: '100%', height: 150, objectFit: 'cover' }}
-          //     />
-          //   ) : (
-          //     <video
-          //       src={m.secure_url}
-          //       controls
-          //       style={{ width: '100%', height: 150, objectFit: 'cover' }}
-          //     />
-          //   )}
-
-          //   <p>💰 ${m.price}</p>
-          // </div>
+        {media.map((m) => (          
           <div
             key={m._id}
             style={{
