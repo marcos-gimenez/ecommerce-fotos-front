@@ -8,24 +8,26 @@
   font-size: 32px;
   margin-bottom: 32px;
   font-weight: 600;
+  color: var(--text-primary);
 } 
 
 /* GRID */
 .event-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 24px;
 } 
 
 /* CARD */
 .event-card {
-  background: var(--bg-card);
-  border-radius: 16px;
+  position: relative;
+  border-radius: 12px;
   overflow: hidden;
+  background: var(--bg-card);
   text-decoration: none;
   color: inherit;
-  transition: transform 0.2s ease, background 0.2s ease;
-} 
+  transition: transform 0.25s ease, background 0.25s ease;
+}
 
 .event-card:hover {
   transform: translateY(-6px) scale(1.01);
@@ -37,27 +39,98 @@
 }
 
 /* PLACEHOLDER (hasta tener imagen real) */
+.event-media {
+  position: relative;
+  width: 100%;
+  height: 450px;
+  overflow: hidden;
+}
+
+
 .event-image-placeholder {
-  height: 180px;
+  width: 100%;
+  height: 100%;
   background: linear-gradient(135deg, #1f1f1f, #2a2a2a);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 48px;
+  font-size: 56px;
   color: var(--text-muted);
-} 
-
-/* INFO */
-.event-info {
-  padding: 14px 16px;
+  transition: transform 0.8s ease;
 }
 
-.event-info h3 {
-  font-size: 18px;
-  margin-bottom: 4px;
+.event-card:hover .event-image-placeholder {
+  transform: scale(1.1);
 }
 
-.event-info p {
+.event-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.85),
+    rgba(0,0,0,0.4),
+    rgba(0,0,0,0)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.event-card:hover .event-overlay {
+  opacity: 1;
+}
+.event-overlay-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.event-text {
+  max-width: 70%;
+}
+
+
+.event-card:hover .event-overlay-content {
+  transform: translateY(0);
+}
+
+.event-overlay-content h3 {
+  font-size: 20px;
+  font-weight: 400; /* antes 600 */
+  margin-bottom: 6px;
+  color: white;
+}
+
+.event-meta {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.65);
+}
+
+.event-cta {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.9);
+  color: black;
+  border-radius: 999px;
   font-size: 14px;
-  color: var(--text-secondary);
-} 
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.event-card:hover .event-cta {
+  background: white;
+  transform: translateY(-2px);
+}
+
+
+
+
+

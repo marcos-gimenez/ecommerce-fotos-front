@@ -47,6 +47,22 @@ export default function ListMedia() {
     }
   };
 
+  const setAsCover = async (imageUrl) => {
+    try {
+      await fetch(`${import.meta.env.VITE_API_URL}/events/${eventId}/cover`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ coverImage: imageUrl }),
+      });
+
+      setMessage("✅ Portada actualizada");
+    } catch {
+      setMessage("Error asignando portada");
+    }
+  };
+
   return (
     <div style={{ maxWidth: 900, margin: "40px auto" }}>
       <h2>Media por evento</h2>
@@ -93,6 +109,21 @@ export default function ListMedia() {
                 style={{ width: "100%", height: 120, objectFit: "cover" }}
               />
             )}
+
+            <button
+              onClick={() => setAsCover(m.secure_url)}
+              style={{
+                marginTop: 6,
+                background: "#2f4f4f",
+                color: "#fff",
+                border: "none",
+                padding: "6px 8px",
+                cursor: "pointer",
+                width: "100%",
+              }}
+            >
+              Usar como portada
+            </button>
 
             <p style={{ margin: "8px 0 0" }}>💰 ${m.price}</p>
             <button
