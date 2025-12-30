@@ -9,7 +9,7 @@ export default function Header() {
     <header className="header">
       <div className="header-container">
         <Link to="/" className="logo">
-          PAMPA FOTO
+          <img src="/logo-pampa-foto.png" alt="Pampa Foto" />
         </Link>
 
         {!isAdmin && (

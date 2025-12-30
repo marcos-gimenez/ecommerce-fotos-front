@@ -20,7 +20,7 @@
 /* CARD */
 .event-card {
   background: var(--bg-card);
-  border-radius: 14px;
+  border-radius: 16px;
   overflow: hidden;
   text-decoration: none;
   color: inherit;
@@ -28,9 +28,13 @@
 } 
 
 .event-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-6px) scale(1.01);
   background: var(--bg-hover);
 } 
+
+.event-card img {
+  filter: brightness(0.95);
+}
 
 /* PLACEHOLDER (hasta tener imagen real) */
 .event-image-placeholder {
