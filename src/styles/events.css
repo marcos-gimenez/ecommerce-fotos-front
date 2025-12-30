@@ -1,7 +1,7 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 120px 20px 32px;
+    
 }
 
 .page-title {
@@ -14,7 +14,7 @@
 /* GRID */
 .event-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(335px, 1fr));
   gap: 24px;
 } 
 
@@ -38,7 +38,7 @@
   filter: brightness(0.95);
 }
 
-/* PLACEHOLDER (hasta tener imagen real) */
+/* PLACEHOLDER  */
 .event-media {
   position: relative;
   width: 100%;
