@@ -1,4 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+
 import Events from './pages/Events';
 import EventDetail from './pages/EventDetail';
 import UploadMedia from './pages/admin/UploadMedia';
@@ -15,6 +18,8 @@ import './styles/theme.css';
 function App() {
   return (
     <BrowserRouter>
+      <Header />
+      
       <Routes>
         {/* Público */}
         <Route path="/" element={<Events />} />
@@ -33,6 +38,8 @@ function App() {
         <Route path="/admin/sales" element={<Sales />} />
         
       </Routes>
+
+      <Footer />
     </BrowserRouter>
   );
 }

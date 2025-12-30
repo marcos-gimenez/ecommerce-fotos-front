@@ -1,0 +1,31 @@
+.header {
+  background: #0e0e0e;
+  border-bottom: 1px solid #222;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: #f5f5f5;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.nav a {
+  color: #f5f5f5;
+  text-decoration: none;
+  margin-left: 16px;
+  font-size: 14px;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+}
