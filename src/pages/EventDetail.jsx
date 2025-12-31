@@ -89,12 +89,7 @@ export default function EventDetail() {
               onContextMenu={(e) => e.preventDefault()} // 🚫 click derecho
             >
               {/* Imagen / video */}
-              {m.resource_type === "image" ? (
-                // <img
-                //   src={m.preview_url}
-                //   alt=""
-                //   className="media-img watermark"
-                // />
+              {m.resource_type === "image" ? (              
                 <img
                   src={m.preview_url}
                   alt=""
