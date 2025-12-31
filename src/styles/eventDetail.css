@@ -36,6 +36,7 @@
   object-fit: cover; /* 👈 CLAVE */
   display: block;
   pointer-events: none; /* 🚫 arrastrar */
+  filter: contrast(0.95) brightness(0.85);
 }
 
 .media-img {
@@ -96,4 +97,15 @@
 
 .media-card.selected {
   outline: 2px solid var(--accent);
+}
+
+@media (max-width: 768px) {
+  .media-grid {
+    padding: 0 12px;      /* 👈 aire lateral */
+    gap: 16px;            /* un poco menos de espacio */
+  }
+
+  .media-card {
+    border-radius: 12px;  /* se ve mejor en mobile */
+  }
 }
