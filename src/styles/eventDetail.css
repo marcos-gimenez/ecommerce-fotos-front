@@ -1,3 +1,16 @@
+.page-title {
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.event-date {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+
 .back-btn {
   padding: 20px;
   background: none;
@@ -14,6 +27,41 @@
   color: var(--text-primary);
   font-weight: 400;
 }
+
+/* =========================
+   FOLDERS FILTER
+========================= */
+
+.folder-filters {
+  display: flex;
+  gap: 10px;
+  margin: 24px 0 32px;
+  flex-wrap: wrap;
+}
+
+.folder-btn {
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  color: var(--text-secondary);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.folder-btn:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.folder-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
 
 .media-grid {
   display: grid;
@@ -37,6 +85,12 @@
   display: block;
   pointer-events: none; /* 🚫 arrastrar */
   filter: contrast(0.95) brightness(0.85);
+  transition: transform 0.6s ease, filter 0.3s ease;
+}
+
+.media-card:hover img,
+.media-card:hover video {
+  transform: scale(1.03);
 }
 
 .media-img {
@@ -69,9 +123,10 @@
 }
 
 .media-price {
-  color: rgba(255,255,255,0.85);
-  font-size: 15px;
-  margin-bottom: 10px;
+  color: rgba(255,255,255,0.8);
+  font-size: 14px;
+  font-weight: 400;
+  margin-bottom: 5px;
 }
 
 .media-btn {
@@ -81,9 +136,13 @@
   border: none;
   font-size: 13px;
   cursor: pointer;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.85);
   color: black;
   transition: transform 0.2s ease, background 0.2s ease;  
+}
+
+.media-btn:hover {
+  background: white;
 }
 
 .media-card:hover .media-btn {
@@ -99,6 +158,19 @@
   outline: 2px solid var(--accent);
 }
 
+.media-card.selected::after {
+  content: "EN CARRITO";
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(76,175,80,0.9);
+  color: white;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+
 @media (max-width: 768px) {
   .media-grid {
     padding: 0 12px;      /* 👈 aire lateral */
@@ -108,4 +180,11 @@
   .media-card {
     border-radius: 12px;  /* se ve mejor en mobile */
   }
+}
+
+.folder-count {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-left: 6px;
 }

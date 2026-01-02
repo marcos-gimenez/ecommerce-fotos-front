@@ -14,3 +14,7 @@ export async function adminLogin(email, password) {
 
   return res.json(); // { token }
 }
+
+export function adminLogout() {
+  localStorage.removeItem('adminToken');
+}

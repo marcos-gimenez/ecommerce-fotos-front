@@ -9,12 +9,28 @@ export default function UploadMedia() {
   const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [folders, setFolders] = useState([]);
+  const [folder, setFolder] = useState("");
+  const [newFolder, setNewFolder] = useState("");
+
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     getEvents()
       .then(setEvents)
       .catch(() => setMessage("Error cargando eventos"));
   }, []);
+
+  useEffect(() => {
+    if (!eventId) return;
+
+    setFolder("");
+    setNewFolder("");
+
+    fetch(`${API_URL}/media/folders?event=${eventId}`)
+      .then((res) => res.json())
+      .then(setFolders);
+  }, [eventId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,10 +48,15 @@ export default function UploadMedia() {
     });
     formData.append("price", price || 0);
 
+    const finalFolder =
+      folder === "__new" ? newFolder || "General" : folder || "General";
+
+    formData.append("folder", finalFolder);
+
     try {
       setLoading(true);
       await uploadMedia(formData);
-      setMessage("✅ ${files.length} archivos subidos correctamente");
+      setMessage(`✅ ${files.length} archivos subidos correctamente`);
       setFiles([]);
       setPrice("");
     } catch (err) {
@@ -79,6 +100,29 @@ export default function UploadMedia() {
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
+        </div>
+
+        <div>
+          <label>Carpeta</label>
+
+          <select value={folder} onChange={(e) => setFolder(e.target.value)}>
+            <option value="">General</option>
+            {folders.map((f) => (
+              <option key={f} value={f}>
+                {f}
+              </option>
+            ))}
+            <option value="__new">➕ Crear nueva</option>
+          </select>
+
+          {folder === "__new" && (
+            <input
+              type="text"
+              placeholder="Nombre de la nueva carpeta"
+              value={newFolder}
+              onChange={(e) => setNewFolder(e.target.value)}
+            />
+          )}
         </div>
 
         <button type="submit" disabled={loading}>

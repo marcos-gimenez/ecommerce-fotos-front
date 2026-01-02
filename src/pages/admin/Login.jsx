@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { adminLogin } from '../../services/adminAuth';
+import '../../styles/admin.css';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -20,10 +21,10 @@ export default function AdminLogin() {
   }
 
   return (
-    <div style={{ maxWidth: 360, margin: '80px auto' }}>
-      <h2>Admin Login</h2>
+    <div className="admin-container">
+      <h2 className="admin-title">Admin Login</h2>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="admin-form">
         <input
           type="email"
           placeholder="Email"
@@ -40,9 +41,11 @@ export default function AdminLogin() {
           required
         />
 
-        <button type="submit">Ingresar</button>
+        <button className="admin-submit" type="submit">
+          Ingresar
+        </button>
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && <p className="admin-error">{error}</p>}
       </form>
     </div>
   );
