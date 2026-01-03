@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
-import { getEvents } from "../../api/events";
-import { getMediaByEvent } from "../../api/media";
-import { deleteMedia } from "../../api/media";
+import { getEvents, deleteEvent } from "../../api/events";
+import {
+  getMediaByEvent,
+  deleteMedia,
+  deleteFolder, // 👈 nuevo
+} from "../../api/media";
+
+import "../../styles/adminMedia.css";
 
 export default function ListMedia() {
   const [events, setEvents] = useState([]);
   const [eventId, setEventId] = useState("");
   const [media, setMedia] = useState([]);
+  const [folders, setFolders] = useState([]);        // 👈 nuevo
+  const [activeFolder, setActiveFolder] = useState(""); // 👈 nuevo
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [deletingEvent, setDeletingEvent] = useState(false);
 
   useEffect(() => {
     getEvents()
@@ -19,10 +27,17 @@ export default function ListMedia() {
   const loadMedia = async (id) => {
     setMessage("");
     setLoading(true);
+
     try {
       const data = await getMediaByEvent(id);
       setMedia(data);
-    } catch (e) {
+
+      // 👇 derivar carpetas desde la media
+      const uniqueFolders = [
+        ...new Set(data.map((m) => m.folder || "General")),
+      ];
+      setFolders(uniqueFolders);
+    } catch {
       setMessage("Error cargando media");
     } finally {
       setLoading(false);
@@ -32,18 +47,67 @@ export default function ListMedia() {
   const handleChangeEvent = (e) => {
     const id = e.target.value;
     setEventId(id);
+    setActiveFolder("");
     if (id) loadMedia(id);
     else setMedia([]);
   };
 
-  const handleDelete = async (id) => {
+  const handleDeleteMedia = async (id) => {
     if (!confirm("¿Eliminar este archivo?")) return;
 
     try {
       await deleteMedia(id);
       setMedia((prev) => prev.filter((m) => m._id !== id));
-    } catch (e) {
+    } catch {
       setMessage("Error eliminando media");
+    }
+  };
+
+  const handleDeleteFolder = async () => {
+    if (!activeFolder) return;
+
+    const ok = confirm(
+      `⚠️ Eliminar carpeta "${activeFolder}"\n\n` +
+      `Se borrarán TODOS los archivos.\n\n¿Continuar?`
+    );
+
+    if (!ok) return;
+
+    try {
+      await deleteFolder(eventId, activeFolder);
+
+      setMedia((prev) => prev.filter((m) => m.folder !== activeFolder));
+      setFolders((prev) => prev.filter((f) => f !== activeFolder));
+      setActiveFolder("");
+      setMessage("✅ Carpeta eliminada");
+    } catch (err) {
+      setMessage(err.message);
+    }
+  };
+
+  const handleDeleteEvent = async () => {
+    const eventName = events.find((e) => e._id === eventId)?.title;
+
+    const ok = confirm(
+      `⚠️ Vas a eliminar el evento "${eventName}"\n\n` +
+      `Se borrarán TODAS las fotos y videos.\n\n¿Continuar?`
+    );
+
+    if (!ok) return;
+
+    try {
+      setDeletingEvent(true);
+      await deleteEvent(eventId);
+
+      setEvents((prev) => prev.filter((e) => e._id !== eventId));
+      setEventId("");
+      setMedia([]);
+      setFolders([]);
+      setMessage("✅ Evento eliminado correctamente");
+    } catch (err) {
+      setMessage(err.message || "Error eliminando evento");
+    } finally {
+      setDeletingEvent(false);
     }
   };
 
@@ -51,9 +115,7 @@ export default function ListMedia() {
     try {
       await fetch(`${import.meta.env.VITE_API_URL}/events/${eventId}/cover`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ coverImage: imageUrl }),
       });
 
@@ -63,9 +125,23 @@ export default function ListMedia() {
     }
   };
 
+  const visibleMedia = activeFolder
+    ? media.filter((m) => m.folder === activeFolder)
+    : media;
+
   return (
-    <div style={{ maxWidth: 900, margin: "40px auto" }}>
+    <div className="admin-media">
       <h2>Media por evento</h2>
+
+      {eventId && (
+        <button
+          className="event-delete-btn"
+          onClick={handleDeleteEvent}
+          disabled={deletingEvent}
+        >
+          {deletingEvent ? "Eliminando evento..." : "Eliminar evento completo"}
+        </button>
+      )}
 
       <select value={eventId} onChange={handleChangeEvent}>
         <option value="">Seleccionar evento</option>
@@ -76,66 +152,53 @@ export default function ListMedia() {
         ))}
       </select>
 
-      {loading && <p>Cargando...</p>}
-      {message && <p>{message}</p>}
+      {folders.length > 0 && (
+        <div className="admin-folders">
+          {folders.map((f) => (
+            <button
+              key={f}
+              className={f === activeFolder ? "active" : ""}
+              onClick={() => setActiveFolder(f)}
+            >
+              {f}
+            </button>
+          ))}
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-          gap: 16,
-          marginTop: 20,
-        }}
-      >
-        {media.map((m) => (
-          <div
-            key={m._id}
-            style={{
-              border: "1px solid #ddd",
-              padding: 8,
-              borderRadius: 6,
-            }}
-          >
+          {activeFolder && (
+            <button
+              className="folder-delete-btn"
+              onClick={handleDeleteFolder}
+            >
+              Eliminar carpeta
+            </button>
+          )}
+        </div>
+      )}
+
+      {loading && <p className="admin-loading">Cargando...</p>}
+      {message && <p className="admin-message">{message}</p>}
+
+      <div className="admin-media-grid">
+        {visibleMedia.map((m) => (
+          <div key={m._id} className="admin-media-card">
             {m.resource_type === "image" ? (
-              <img
-                src={m.secure_url}
-                alt=""
-                style={{ width: "100%", height: 120, objectFit: "cover" }}
-              />
+              <img src={m.secure_url} alt="" />
             ) : (
-              <video
-                src={m.secure_url}
-                controls
-                style={{ width: "100%", height: 120, objectFit: "cover" }}
-              />
+              <video src={m.secure_url} controls />
             )}
 
             <button
+              className="media-cover-btn"
               onClick={() => setAsCover(m.secure_url)}
-              style={{
-                marginTop: 6,
-                background: "#2f4f4f",
-                color: "#fff",
-                border: "none",
-                padding: "6px 8px",
-                cursor: "pointer",
-                width: "100%",
-              }}
             >
               Usar como portada
             </button>
 
-            <p style={{ margin: "8px 0 0" }}>💰 ${m.price}</p>
+            <p className="media-price">💰 ${m.price}</p>
+
             <button
-              onClick={() => handleDelete(m._id)}
-              style={{
-                marginTop: 8,
-                background: "#c0392b",
-                color: "#fff",
-                border: "none",
-                padding: "6px 8px",
-                cursor: "pointer",
-              }}
+              className="media-delete-btn"
+              onClick={() => handleDeleteMedia(m._id)}
             >
               Eliminar
             </button>
