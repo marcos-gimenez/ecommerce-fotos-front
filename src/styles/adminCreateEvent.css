@@ -1,0 +1,17 @@
+.admin-create-event {
+  max-width: 600px;
+  margin: 60px auto;
+  padding: 0 24px;
+}
+
+.admin-create-event h2 {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+}
+
+.admin-create-event textarea {
+  min-height: 80px;
+  resize: vertical;
+}

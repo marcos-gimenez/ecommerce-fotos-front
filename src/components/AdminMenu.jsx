@@ -16,6 +16,7 @@ export default function AdminMenu() {
         <NavLink to="/admin/upload">Subir media</NavLink>
         <NavLink to="/admin/media">Gestionar media</NavLink>
         <NavLink to="/admin/sales">Ventas</NavLink>
+        <NavLink to="/admin/create-event">Crear evento</NavLink>
       </nav>
 
       <button className="admin-logout" onClick={logout}>

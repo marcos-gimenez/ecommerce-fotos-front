@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { getEvents, deleteEvent } from "../../api/events";
+import { getEvents, deleteEvent, updateEvent } from "../../api/events";
 import {
   getMediaByEvent,
   deleteMedia,
   deleteFolder, // 👈 nuevo
+  updateMedia,
 } from "../../api/media";
 
 import "../../styles/adminMedia.css";
@@ -12,11 +13,12 @@ export default function ListMedia() {
   const [events, setEvents] = useState([]);
   const [eventId, setEventId] = useState("");
   const [media, setMedia] = useState([]);
-  const [folders, setFolders] = useState([]);        // 👈 nuevo
+  const [folders, setFolders] = useState([]); // 👈 nuevo
   const [activeFolder, setActiveFolder] = useState(""); // 👈 nuevo
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [deletingEvent, setDeletingEvent] = useState(false);
+  const currentEvent = events.find((e) => e._id === eventId);
 
   useEffect(() => {
     getEvents()
@@ -68,7 +70,7 @@ export default function ListMedia() {
 
     const ok = confirm(
       `⚠️ Eliminar carpeta "${activeFolder}"\n\n` +
-      `Se borrarán TODOS los archivos.\n\n¿Continuar?`
+        `Se borrarán TODOS los archivos.\n\n¿Continuar?`
     );
 
     if (!ok) return;
@@ -90,7 +92,7 @@ export default function ListMedia() {
 
     const ok = confirm(
       `⚠️ Vas a eliminar el evento "${eventName}"\n\n` +
-      `Se borrarán TODAS las fotos y videos.\n\n¿Continuar?`
+        `Se borrarán TODAS las fotos y videos.\n\n¿Continuar?`
     );
 
     if (!ok) return;
@@ -165,10 +167,7 @@ export default function ListMedia() {
           ))}
 
           {activeFolder && (
-            <button
-              className="folder-delete-btn"
-              onClick={handleDeleteFolder}
-            >
+            <button className="folder-delete-btn" onClick={handleDeleteFolder}>
               Eliminar carpeta
             </button>
           )}
@@ -178,6 +177,58 @@ export default function ListMedia() {
       {loading && <p className="admin-loading">Cargando...</p>}
       {message && <p className="admin-message">{message}</p>}
 
+      {eventId && currentEvent && (
+        <div className="event-edit">
+          <input
+            value={currentEvent.title}
+            onChange={(e) =>
+              setEvents((prev) =>
+                prev.map((ev) =>
+                  ev._id === eventId ? { ...ev, title: e.target.value } : ev
+                )
+              )
+            }
+          />
+
+          <input
+            type="date"
+            value={currentEvent.date?.slice(0, 10)}
+            onChange={(e) =>
+              setEvents((prev) =>
+                prev.map((ev) =>
+                  ev._id === eventId ? { ...ev, date: e.target.value } : ev
+                )
+              )
+            }
+          />
+
+          <textarea
+            value={currentEvent.description || ""}
+            onChange={(e) =>
+              setEvents((prev) =>
+                prev.map((ev) =>
+                  ev._id === eventId
+                    ? { ...ev, description: e.target.value }
+                    : ev
+                )
+              )
+            }
+          />
+
+          <button
+            onClick={() =>
+              updateEvent(eventId, {
+                title: currentEvent.title,
+                date: currentEvent.date,
+                description: currentEvent.description,
+              }).then(() => setMessage("✅ Evento actualizado"))
+            }
+          >
+            Guardar cambios
+          </button>
+        </div>
+      )}
+
       <div className="admin-media-grid">
         {visibleMedia.map((m) => (
           <div key={m._id} className="admin-media-card">
@@ -186,6 +237,44 @@ export default function ListMedia() {
             ) : (
               <video src={m.secure_url} controls />
             )}
+
+            <input
+              type="number"
+              value={m.price}
+              onChange={(e) =>
+                setMedia((prev) =>
+                  prev.map((x) =>
+                    x._id === m._id ? { ...x, price: e.target.value } : x
+                  )
+                )
+              }
+            />
+
+            <input
+              type="text"
+              value={m.folder}
+              onChange={(e) =>
+                setMedia((prev) =>
+                  prev.map((x) =>
+                    x._id === m._id ? { ...x, folder: e.target.value } : x
+                  )
+                )
+              }
+            />
+
+            <button
+              onClick={() =>
+                updateMedia(m._id, {
+                  price: Number(m.price),
+                  folder: m.folder,
+                }).then(() => {
+                  setMessage("✅ Media actualizada");
+                  loadMedia(eventId);
+                })
+              }
+            >
+              Guardar
+            </button>
 
             <button
               className="media-cover-btn"

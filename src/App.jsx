@@ -14,6 +14,7 @@ import UploadPage from "./pages/admin/UploadPage";
 import ListMediaPage from "./pages/admin/ListMediaPage";
 import SalesPage from "./pages/admin/SalesPage";
 import SaleDetail from './pages/admin/SaleDetail';
+import CreateEventPage from "./pages/admin/CreateEventPage";
 
 
 import "./styles/theme.css";
@@ -40,6 +41,8 @@ function App() {
           <Route path="/admin/media" element={<ListMediaPage />} />
           <Route path="/admin/sales" element={<SalesPage />} />
           <Route path="/admin/sales/:id" element={<SaleDetail />} />
+          <Route path="/admin/create-event" element={<CreateEventPage />} />
+
 
         </Routes>
 

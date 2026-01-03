@@ -74,3 +74,24 @@ export async function deleteFolder(eventId, folder) {
 
   return res.json();
 }
+
+export async function updateMedia(id, data) {
+  const token = localStorage.getItem('adminToken');
+
+  const res = await fetch(`${API_URL}/media/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Error editando media');
+  }
+
+  return res.json();
+}
+

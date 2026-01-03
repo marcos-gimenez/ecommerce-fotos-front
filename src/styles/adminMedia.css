@@ -131,3 +131,32 @@
   border-radius: 999px;
   cursor: pointer;
 }
+
+.event-edit {
+  margin: 20px 0;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  display: grid;
+  gap: 10px;
+}
+
+.event-edit input,
+.event-edit textarea {
+  background: #0e0e0e;
+  border: 1px solid var(--border-soft);
+  color: var(--text-primary);
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.event-edit button {
+  align-self: flex-end;
+  background: var(--accent);
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
