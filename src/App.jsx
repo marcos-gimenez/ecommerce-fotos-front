@@ -2,17 +2,20 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-import AdminGuard from "./components/AdminGuard";
 import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
-import UploadMedia from "./pages/admin/UploadMedia";
-import ListMedia from "./pages/admin/ListMedia";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Thanks from "./pages/Thanks";
+
 import AdminLogin from "./pages/admin/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
-import Sales from "./pages/admin/Sales";
+import UploadPage from "./pages/admin/UploadPage";
+import ListMediaPage from "./pages/admin/ListMediaPage";
+import SalesPage from "./pages/admin/SalesPage";
+import SaleDetail from './pages/admin/SaleDetail';
+
+
 import "./styles/theme.css";
 
 function App() {
@@ -32,42 +35,12 @@ function App() {
 
           {/* Admin */}
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/upload" element={<UploadPage />} />
+          <Route path="/admin/media" element={<ListMediaPage />} />
+          <Route path="/admin/sales" element={<SalesPage />} />
+          <Route path="/admin/sales/:id" element={<SaleDetail />} />
 
-          <Route
-            path="/admin"
-            element={
-              <AdminGuard>
-                <AdminDashboard />
-              </AdminGuard>
-            }
-          />
-
-          <Route
-            path="/admin/upload"
-            element={
-              <AdminGuard>
-                <UploadMedia />
-              </AdminGuard>
-            }
-          />
-
-          <Route
-            path="/admin/media"
-            element={
-              <AdminGuard>
-                <ListMedia />
-              </AdminGuard>
-            }
-          />
-
-          <Route
-            path="/admin/sales"
-            element={
-              <AdminGuard>
-                <Sales />
-              </AdminGuard>
-            }
-          />
         </Routes>
 
         <Footer />

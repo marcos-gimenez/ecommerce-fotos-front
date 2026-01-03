@@ -1,0 +1,71 @@
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-main);
+}
+
+/* Sidebar */
+.admin-menu {
+  width: 240px;
+  background: #0b0b0b;
+  border-right: 1px solid var(--border-soft);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-logo {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 32px;
+  letter-spacing: 1px;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-nav a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-nav a:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.admin-nav a.active {
+  background: var(--accent);
+  color: white;
+}
+
+/* Logout */
+.admin-logout {
+  margin-top: auto;
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  color: var(--text-secondary);
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.admin-logout:hover {
+  border-color: #ff4d4d;
+  color: #ff4d4d;
+}
+
+/* Content */
+.admin-content {
+  flex: 1;
+  padding: 40px;
+}

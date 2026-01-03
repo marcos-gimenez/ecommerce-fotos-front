@@ -1,42 +1,63 @@
-import { useEffect, useState } from 'react';
-import { getOrders } from '../../api/orders';
+import { useEffect, useState } from "react";
+import { getOrders } from "../../api/orders";
+import { useNavigate } from 'react-router-dom';
+import "../../styles/adminSales.css";
 
 export default function Sales() {
   const [orders, setOrders] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     getOrders()
       .then(setOrders)
-      .catch(err => setError(err.message));
+      .catch((err) => setError(err.message));
   }, []);
 
   return (
-    <div style={{ maxWidth: 900, margin: '40px auto' }}>
+    <div className="admin-sales">
       <h2>Ventas</h2>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <table width="100%" border="1" cellPadding="8">
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Fecha</th>
-            <th>Total</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map(o => (
-            <tr key={o._id}>
-              <td>{o.email}</td>
-              <td>{new Date(o.createdAt).toLocaleString()}</td>
-              <td>${o.total}</td>
-              <td>{o.status}</td>
+      {orders.length === 0 ? (
+        <div className="sales-empty">No hay ventas todavía</div>
+      ) : (
+        <table className="sales-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Fecha</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {orders.map((o) => (
+              <tr key={o._id}>
+                <td>{o.email}</td>
+                <td>{new Date(o.createdAt).toLocaleString()}</td>
+                <td className="order-total">${o.total}</td>
+                <td>
+                  <span className={`order-status ${o.status}`}>{o.status}</span>
+                </td>
+                <td>
+                  <button
+                    className="sales-view-btn"
+                    onClick={() => navigate(`/admin/sales/${o._id}`)}
+                  >
+                    Ver
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
