@@ -69,7 +69,10 @@
 }
 
 /* Buttons */
-.media-cover-btn {
+
+
+.media-cover-btn,
+.media-save-btn {
   margin-top: 6px;
   width: 100%;
   background: var(--accent);
@@ -78,6 +81,10 @@
   padding: 6px 8px;
   border-radius: 6px;
   cursor: pointer;
+}
+.media-cover-btn:hover,
+.media-save-btn:hover {
+  background: var(--accent-hover);
 }
 
 .media-delete-btn {
@@ -89,6 +96,9 @@
   padding: 6px 8px;
   border-radius: 6px;
   cursor: pointer;
+}
+.media-delete-btn:hover {
+  background: #dd220e;
 }
 
 /* Price */
@@ -160,3 +170,48 @@
   border-radius: 999px;
   cursor: pointer;
 }
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+  .admin-media-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .admin-media-card {
+    padding: 6px;
+  }
+
+  .admin-media-card img,
+  .admin-media-card video {
+    height: 100px;
+  }
+
+  .admin-media-card button,
+  .admin-media-card select,
+  .admin-media-card input {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 420px) {
+  .admin-media-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-media-card select,
+.admin-media-card input,
+.admin-media select {
+  width: 100%;
+  margin-top: 6px;
+  background: #0e0e0e;
+  border: 1px solid var(--border-soft);
+  color: var(--text-primary);
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+

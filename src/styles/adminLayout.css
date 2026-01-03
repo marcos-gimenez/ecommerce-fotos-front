@@ -69,3 +69,47 @@
   flex: 1;
   padding: 40px;
 }
+
+
+/* Mobile */
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-content {
+    padding: 16px;
+  }
+}
+
+/* Menu hamburguesa */
+.admin-menu-toggle {
+  display: none;
+}
+
+/* Mobile sidebar */
+@media (max-width: 768px) {
+  .admin-menu-toggle {
+    display: block;
+    background: transparent;
+    border: 1px solid var(--border-soft);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+
+  .admin-menu {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+
+  .admin-menu.open {
+    left: 0;
+  }
+}
+

@@ -98,3 +98,9 @@
   color: var(--text-muted);
   margin-top: 4px;
 }
+
+.sale-error {
+  color: #e74c3c;
+  font-size: 14px;
+}
+

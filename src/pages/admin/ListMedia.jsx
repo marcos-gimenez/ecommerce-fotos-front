@@ -1,11 +1,21 @@
 import { useEffect, useState } from "react";
-import { getEvents, deleteEvent, updateEvent } from "../../api/events";
+import {
+  getEvents,
+  deleteEvent,
+  updateEvent,
+} from "../../api/events";
 import {
   getMediaByEvent,
   deleteMedia,
-  deleteFolder, // 👈 nuevo
+  deleteFolder,
   updateMedia,
 } from "../../api/media";
+
+import {
+  confirmDanger,
+  successAlert,
+  errorAlert,
+} from "../../utils/alerts";
 
 import "../../styles/adminMedia.css";
 
@@ -13,67 +23,91 @@ export default function ListMedia() {
   const [events, setEvents] = useState([]);
   const [eventId, setEventId] = useState("");
   const [media, setMedia] = useState([]);
-  const [folders, setFolders] = useState([]); // 👈 nuevo
-  const [activeFolder, setActiveFolder] = useState(""); // 👈 nuevo
+  const [folders, setFolders] = useState([]);
+  const [activeFolder, setActiveFolder] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
   const [deletingEvent, setDeletingEvent] = useState(false);
+
   const currentEvent = events.find((e) => e._id === eventId);
 
+  // ===============================
+  // Cargar eventos
+  // ===============================
   useEffect(() => {
     getEvents()
       .then(setEvents)
-      .catch(() => setMessage("Error cargando eventos"));
+      .catch(() => errorAlert("Error cargando eventos"));
   }, []);
 
+  // ===============================
+  // Cargar media por evento
+  // ===============================
   const loadMedia = async (id) => {
-    setMessage("");
     setLoading(true);
+    setActiveFolder("");
 
     try {
       const data = await getMediaByEvent(id);
       setMedia(data);
 
-      // 👇 derivar carpetas desde la media
       const uniqueFolders = [
         ...new Set(data.map((m) => m.folder || "General")),
       ];
       setFolders(uniqueFolders);
     } catch {
-      setMessage("Error cargando media");
+      errorAlert("Error cargando media");
     } finally {
       setLoading(false);
     }
   };
 
+  // ===============================
+  // Cambio de evento
+  // ===============================
   const handleChangeEvent = (e) => {
     const id = e.target.value;
     setEventId(id);
-    setActiveFolder("");
-    if (id) loadMedia(id);
-    else setMedia([]);
+
+    if (!id) {
+      setMedia([]);
+      setFolders([]);
+      setActiveFolder("");
+      return;
+    }
+
+    loadMedia(id);
   };
 
+  // ===============================
+  // Eliminar media
+  // ===============================
   const handleDeleteMedia = async (id) => {
-    if (!confirm("¿Eliminar este archivo?")) return;
+    const result = await confirmDanger({
+      title: "Eliminar archivo",
+      text: "Este archivo se eliminará definitivamente.",
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       await deleteMedia(id);
       setMedia((prev) => prev.filter((m) => m._id !== id));
+      successAlert("Archivo eliminado");
     } catch {
-      setMessage("Error eliminando media");
+      errorAlert("Error eliminando media");
     }
   };
 
+  // ===============================
+  // Eliminar carpeta
+  // ===============================
   const handleDeleteFolder = async () => {
-    if (!activeFolder) return;
+    const result = await confirmDanger({
+      title: `Eliminar carpeta "${activeFolder}"`,
+      text: "Se eliminarán todos los archivos de esta carpeta.",
+    });
 
-    const ok = confirm(
-      `⚠️ Eliminar carpeta "${activeFolder}"\n\n` +
-        `Se borrarán TODOS los archivos.\n\n¿Continuar?`
-    );
-
-    if (!ok) return;
+    if (!result.isConfirmed) return;
 
     try {
       await deleteFolder(eventId, activeFolder);
@@ -81,21 +115,24 @@ export default function ListMedia() {
       setMedia((prev) => prev.filter((m) => m.folder !== activeFolder));
       setFolders((prev) => prev.filter((f) => f !== activeFolder));
       setActiveFolder("");
-      setMessage("✅ Carpeta eliminada");
+
+      successAlert("Carpeta eliminada");
     } catch (err) {
-      setMessage(err.message);
+      errorAlert(err.message);
     }
   };
 
+  // ===============================
+  // Eliminar evento
+  // ===============================
   const handleDeleteEvent = async () => {
-    const eventName = events.find((e) => e._id === eventId)?.title;
+    const result = await confirmDanger({
+      title: "Eliminar evento",
+      text: "Se eliminarán TODAS las fotos y videos del evento.",
+      confirmText: "Eliminar evento",
+    });
 
-    const ok = confirm(
-      `⚠️ Vas a eliminar el evento "${eventName}"\n\n` +
-        `Se borrarán TODAS las fotos y videos.\n\n¿Continuar?`
-    );
-
-    if (!ok) return;
+    if (!result.isConfirmed) return;
 
     try {
       setDeletingEvent(true);
@@ -105,14 +142,19 @@ export default function ListMedia() {
       setEventId("");
       setMedia([]);
       setFolders([]);
-      setMessage("✅ Evento eliminado correctamente");
+      setActiveFolder("");
+
+      successAlert("Evento eliminado");
     } catch (err) {
-      setMessage(err.message || "Error eliminando evento");
+      errorAlert(err.message);
     } finally {
       setDeletingEvent(false);
     }
   };
 
+  // ===============================
+  // Setear portada
+  // ===============================
   const setAsCover = async (imageUrl) => {
     try {
       await fetch(`${import.meta.env.VITE_API_URL}/events/${eventId}/cover`, {
@@ -121,19 +163,25 @@ export default function ListMedia() {
         body: JSON.stringify({ coverImage: imageUrl }),
       });
 
-      setMessage("✅ Portada actualizada");
+      successAlert("Portada actualizada");
     } catch {
-      setMessage("Error asignando portada");
+      errorAlert("Error asignando portada");
     }
   };
 
+  // ===============================
+  // Media visible según carpeta
+  // ===============================
   const visibleMedia = activeFolder
     ? media.filter((m) => m.folder === activeFolder)
     : media;
 
+  // ===============================
+  // Render
+  // ===============================
   return (
     <div className="admin-media">
-      <h2>Media por evento</h2>
+      <h2>Gestionar media</h2>
 
       {eventId && (
         <button
@@ -156,6 +204,13 @@ export default function ListMedia() {
 
       {folders.length > 0 && (
         <div className="admin-folders">
+          <button
+            className={!activeFolder ? "active" : ""}
+            onClick={() => setActiveFolder("")}
+          >
+            Todas
+          </button>
+
           {folders.map((f) => (
             <button
               key={f}
@@ -167,7 +222,10 @@ export default function ListMedia() {
           ))}
 
           {activeFolder && (
-            <button className="folder-delete-btn" onClick={handleDeleteFolder}>
+            <button
+              className="folder-delete-btn"
+              onClick={handleDeleteFolder}
+            >
               Eliminar carpeta
             </button>
           )}
@@ -175,7 +233,6 @@ export default function ListMedia() {
       )}
 
       {loading && <p className="admin-loading">Cargando...</p>}
-      {message && <p className="admin-message">{message}</p>}
 
       {eventId && currentEvent && (
         <div className="event-edit">
@@ -184,7 +241,9 @@ export default function ListMedia() {
             onChange={(e) =>
               setEvents((prev) =>
                 prev.map((ev) =>
-                  ev._id === eventId ? { ...ev, title: e.target.value } : ev
+                  ev._id === eventId
+                    ? { ...ev, title: e.target.value }
+                    : ev
                 )
               )
             }
@@ -196,7 +255,9 @@ export default function ListMedia() {
             onChange={(e) =>
               setEvents((prev) =>
                 prev.map((ev) =>
-                  ev._id === eventId ? { ...ev, date: e.target.value } : ev
+                  ev._id === eventId
+                    ? { ...ev, date: e.target.value }
+                    : ev
                 )
               )
             }
@@ -221,7 +282,9 @@ export default function ListMedia() {
                 title: currentEvent.title,
                 date: currentEvent.date,
                 description: currentEvent.description,
-              }).then(() => setMessage("✅ Evento actualizado"))
+              })
+                .then(() => successAlert("Evento actualizado"))
+                .catch(() => errorAlert("Error actualizando evento"))
             }
           >
             Guardar cambios
@@ -238,39 +301,50 @@ export default function ListMedia() {
               <video src={m.secure_url} controls />
             )}
 
+            <select
+              value={m.folder}
+              onChange={(e) =>
+                setMedia((prev) =>
+                  prev.map((x) =>
+                    x._id === m._id
+                      ? { ...x, folder: e.target.value }
+                      : x
+                  )
+                )
+              }
+            >
+              {folders.map((f) => (
+                <option key={f} value={f}>
+                  {f}
+                </option>
+              ))}
+            </select>
+
             <input
               type="number"
               value={m.price}
               onChange={(e) =>
                 setMedia((prev) =>
                   prev.map((x) =>
-                    x._id === m._id ? { ...x, price: e.target.value } : x
+                    x._id === m._id
+                      ? { ...x, price: e.target.value }
+                      : x
                   )
                 )
               }
             />
 
-            <input
-              type="text"
-              value={m.folder}
-              onChange={(e) =>
-                setMedia((prev) =>
-                  prev.map((x) =>
-                    x._id === m._id ? { ...x, folder: e.target.value } : x
-                  )
-                )
-              }
-            />
-
-            <button
+            <button className="media-save-btn"
               onClick={() =>
                 updateMedia(m._id, {
                   price: Number(m.price),
                   folder: m.folder,
-                }).then(() => {
-                  setMessage("✅ Media actualizada");
-                  loadMedia(eventId);
                 })
+                  .then(() => {
+                    successAlert("Media actualizada");
+                    loadMedia(eventId);
+                  })
+                  .catch(() => errorAlert("Error actualizando media"))
               }
             >
               Guardar
@@ -282,8 +356,6 @@ export default function ListMedia() {
             >
               Usar como portada
             </button>
-
-            <p className="media-price">💰 ${m.price}</p>
 
             <button
               className="media-delete-btn"

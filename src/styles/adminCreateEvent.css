@@ -15,3 +15,15 @@
   min-height: 80px;
   resize: vertical;
 }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .admin-create-event {
+    margin: 20px auto;
+    padding: 0 12px;
+  }
+
+  .admin-create-event button {
+    width: 100%;
+  }
+}

@@ -15,7 +15,10 @@
   color: var(--text-primary);
 }
 
-/* Tabla */
+/* =========================
+   TABLA DESKTOP
+========================= */
+
 .sales-table {
   width: 100%;
   border-collapse: collapse;
@@ -50,7 +53,10 @@
   background: #1b1b1b;
 }
 
-/* Estado */
+/* =========================
+   ESTADO
+========================= */
+
 .order-status {
   display: inline-block;
   padding: 4px 10px;
@@ -74,15 +80,82 @@
   color: #ff4d4d;
 }
 
-/* Total */
+/* =========================
+   TOTAL
+========================= */
+
 .order-total {
   font-weight: 500;
 }
 
-/* Empty */
+/* =========================
+   EMPTY STATE
+========================= */
+
 .sales-empty {
   padding: 40px;
   text-align: center;
   color: var(--text-muted);
   font-size: 14px;
+}
+
+/* =========================
+   BOTÓN VER
+========================= */
+
+.sales-view-btn {
+  background: var(--accent);
+  border: none;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.sales-view-btn:hover {
+  background: var(--accent-hover);
+}
+
+.sales-view-btn.full {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* =========================
+   MOBILE CARDS
+========================= */
+
+.sales-mobile {
+  display: none;
+}
+
+.sale-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.sale-card .row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: var(--text-secondary);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .sales-table {
+    display: none;
+  }
+
+  .sales-mobile {
+    display: grid;
+    gap: 12px;
+  }
 }

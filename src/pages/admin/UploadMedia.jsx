@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getEvents } from "../../api/events";
 import { uploadMedia } from "../../api/media";
+import "../../styles/admin.css";
 
 export default function UploadMedia() {
   const [events, setEvents] = useState([]);
@@ -16,16 +17,11 @@ export default function UploadMedia() {
   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    getEvents()
-      .then(setEvents)
-      .catch(() => setMessage("Error cargando eventos"));
+    getEvents().then(setEvents);
   }, []);
 
   useEffect(() => {
     if (!eventId) return;
-
-    setFolder("");
-    setNewFolder("");
 
     fetch(`${API_URL}/media/folders?event=${eventId}`)
       .then((res) => res.json())
@@ -37,28 +33,28 @@ export default function UploadMedia() {
     setMessage("");
 
     if (!eventId || files.length === 0) {
-      setMessage("Seleccioná evento y archivo");
+      setMessage("Seleccioná evento y archivos");
       return;
     }
 
     const formData = new FormData();
     formData.append("event", eventId);
-    files.forEach((file) => {
-      formData.append("files", file);
-    });
     formData.append("price", price || 0);
 
     const finalFolder =
       folder === "__new" ? newFolder || "General" : folder || "General";
-
     formData.append("folder", finalFolder);
+
+    files.forEach((f) => formData.append("files", f));
 
     try {
       setLoading(true);
       await uploadMedia(formData);
-      setMessage(`✅ ${files.length} archivos subidos correctamente`);
+      setMessage("✅ Archivos subidos correctamente");
       setFiles([]);
       setPrice("");
+      setFolder("");
+      setNewFolder("");
     } catch (err) {
       setMessage(err.message);
     } finally {
@@ -67,70 +63,60 @@ export default function UploadMedia() {
   };
 
   return (
-    <div style={{ maxWidth: 500, margin: "40px auto" }}>
-      <h2>Subir foto / video</h2>
+    <div className="admin-container">
+      <h2 className="admin-title">Subir media</h2>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Evento</label>
-          <select value={eventId} onChange={(e) => setEventId(e.target.value)}>
-            <option value="">Seleccionar evento</option>
-            {events.map((ev) => (
-              <option key={ev._id} value={ev._id}>
-                {ev.title}
-              </option>
-            ))}
-          </select>
-        </div>
+      <form className="admin-form" onSubmit={handleSubmit}>
+        <label>Evento</label>
+        <select value={eventId} onChange={(e) => setEventId(e.target.value)}>
+          <option value="">Seleccionar evento</option>
+          {events.map((e) => (
+            <option key={e._id} value={e._id}>
+              {e.title}
+            </option>
+          ))}
+        </select>
 
-        <div>
-          <label>Archivo</label>
+        <label>Archivos</label>
+        <input
+          type="file"
+          multiple
+          accept="image/*,video/*"
+          onChange={(e) => setFiles([...e.target.files])}
+        />
+
+        <label>Precio</label>
+        <input
+          type="number"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+        />
+
+        <label>Carpeta</label>
+        <select value={folder} onChange={(e) => setFolder(e.target.value)}>
+          <option value="">General</option>
+          {folders.map((f) => (
+            <option key={f} value={f}>
+              {f}
+            </option>
+          ))}
+          <option value="__new">➕ Nueva carpeta</option>
+        </select>
+
+        {folder === "__new" && (
           <input
-            type="file"
-            multiple
-            accept="image/*,video/*"
-            onChange={(e) => setFiles(Array.from(e.target.files))}
+            placeholder="Nombre de la carpeta"
+            value={newFolder}
+            onChange={(e) => setNewFolder(e.target.value)}
           />
-        </div>
+        )}
 
-        <div>
-          <label>Precio</label>
-          <input
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label>Carpeta</label>
-
-          <select value={folder} onChange={(e) => setFolder(e.target.value)}>
-            <option value="">General</option>
-            {folders.map((f) => (
-              <option key={f} value={f}>
-                {f}
-              </option>
-            ))}
-            <option value="__new">➕ Crear nueva</option>
-          </select>
-
-          {folder === "__new" && (
-            <input
-              type="text"
-              placeholder="Nombre de la nueva carpeta"
-              value={newFolder}
-              onChange={(e) => setNewFolder(e.target.value)}
-            />
-          )}
-        </div>
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Subiendo..." : "Subir"}
+        <button className="admin-submit" disabled={loading}>
+          {loading ? "Subiendo..." : "Subir media"}
         </button>
       </form>
 
-      {message && <p>{message}</p>}
+      {message && <p className="admin-success">{message}</p>}
     </div>
   );
 }

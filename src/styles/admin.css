@@ -119,3 +119,22 @@
   color: var(--success);
   font-size: 13px;
 }
+
+
+/* Mobile */
+@media (max-width: 768px) {
+  .admin-form {
+    gap: 12px;
+  }
+
+  .admin-form input,
+  .admin-form select,
+  .admin-form textarea {
+    font-size: 16px; /* evita zoom iOS */
+  }
+
+  .admin-submit {
+    width: 100%;
+    align-self: stretch;
+  }
+}
