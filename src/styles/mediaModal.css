@@ -1,0 +1,209 @@
+/* =========================
+   MODAL OVERLAY
+========================= */
+.media-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* =========================
+   MODAL CONTAINER
+========================= */
+.media-modal {
+  position: relative;
+  background: #0b0b0b;
+  border-radius: 16px;
+
+  width: 90vw;
+  max-width: 1200px;
+  height: 80vh;
+  max-height: 820px;
+
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  overflow: hidden;
+}
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+.media-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.media-modal-close:hover {
+  color: white;
+}
+
+/* =========================
+   NAV ARROWS
+========================= */
+.media-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.55);
+  border: none;
+  color: white;
+  font-size: 26px;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-radius: 999px;
+  z-index: 2;
+  transition: background 0.2s ease;
+}
+
+.media-nav:hover {
+  background: rgba(0,0,0,0.8);
+}
+
+.media-nav.prev {
+  left: 16px;
+}
+
+.media-nav.next {
+  right: 16px;
+}
+
+/* =========================
+   PREVIEW
+========================= */
+.media-modal-preview {
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.media-modal-preview img,
+.media-modal-preview video {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* =========================
+   INFO PANEL
+========================= */
+.media-modal-info {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.media-modal-price {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.media-modal-meta {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.media-modal-note {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+.media-modal-actions {
+  margin-top: auto;
+  display: flex;
+  gap: 12px;
+}
+
+.media-modal-btn {
+  flex: 1;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.media-modal-btn.primary {
+  background: var(--accent);
+  color: white;
+}
+
+.media-modal-btn.primary:hover {
+  background: var(--accent-hover);
+}
+
+.media-modal-btn.secondary {
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  color: var(--text-secondary);
+}
+
+.media-modal-btn.secondary:hover {
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+}
+
+/* =========================
+   TABLET
+========================= */
+@media (max-width: 1024px) {
+  .media-modal {
+    grid-template-columns: 1fr;
+    height: 90vh;
+  }
+
+  .media-modal-info {
+    border-top: 1px solid var(--border-soft);
+  }
+
+  .media-nav.prev {
+    left: 8px;
+  }
+
+  .media-nav.next {
+    right: 8px;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 600px) {
+  .media-modal {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  .media-modal-info {
+    padding: 20px;
+  }
+
+  .media-nav {
+    font-size: 22px;
+    padding: 10px 14px;
+  }
+}

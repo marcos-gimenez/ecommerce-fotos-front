@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import "../styles/eventDetail.css";
+import "../styles/mediaModal.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -10,7 +11,9 @@ export default function EventDetail() {
   const [event, setEvent] = useState(null);
   const [media, setMedia] = useState([]);
   const { addItem, removeItem, cart } = useCart();
+
   const [activeFolder, setActiveFolder] = useState("Todas");
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
   useEffect(() => {
     fetch(`${API_URL}/events/${id}`)
@@ -23,7 +26,7 @@ export default function EventDetail() {
 
   if (!event) return <p>Cargando evento...</p>;
 
-  // 📁 Carpetas derivadas de la media
+  // 📁 Carpetas
   const folders = [
     "Todas",
     ...new Set(media.map((m) => m.folder || "General")),
@@ -35,8 +38,11 @@ export default function EventDetail() {
       ? media
       : media.filter((m) => (m.folder || "General") === activeFolder);
 
-  console.log("MEDIA:", media);
+  // 🎯 Media seleccionada
+  const selectedMedia =
+    selectedIndex !== null ? filteredMedia[selectedIndex] : null;
 
+  // Agrupado por carpeta
   const grouped = filteredMedia.reduce((acc, m) => {
     const folder = m.folder || "General";
     acc[folder] = acc[folder] || [];
@@ -52,7 +58,9 @@ export default function EventDetail() {
       </button>
 
       <h1 className="page-title">{event.title}</h1>
-      <p className="event-date">{new Date(event.date).toLocaleDateString()}</p>
+      <p className="event-date">
+        {new Date(event.date).toLocaleDateString()}
+      </p>
 
       {/* 📁 Filtros */}
       <div className="folder-filters">
@@ -68,7 +76,6 @@ export default function EventDetail() {
       </div>
 
       {/* 🖼️ Media */}
-
       {Object.entries(grouped).map(([folderName, items]) => (
         <div key={folderName}>
           <h2 className="section-title">
@@ -78,12 +85,16 @@ export default function EventDetail() {
 
           <div className="media-grid">
             {items.map((m) => {
+              const index = filteredMedia.findIndex(
+                (x) => x._id === m._id
+              );
               const inCart = cart.find((i) => i._id === m._id);
 
               return (
                 <div
                   key={m._id}
                   className={`media-card ${inCart ? "selected" : ""}`}
+                  onClick={() => setSelectedIndex(index)}
                   onContextMenu={(e) => e.preventDefault()}
                 >
                   {m.resource_type === "image" ? (
@@ -111,7 +122,105 @@ export default function EventDetail() {
           </div>
         </div>
       ))}
-      
+
+      {/* =========================
+         MODAL
+      ========================= */}
+      {selectedMedia && (
+        <div
+          className="media-modal-overlay"
+          onClick={() => setSelectedIndex(null)}
+        >
+          <div
+            className="media-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="media-modal-close"
+              onClick={() => setSelectedIndex(null)}
+            >
+              ✕
+            </button>
+
+            {/* Flechas */}
+            <button
+              className="media-nav prev"
+              onClick={() =>
+                setSelectedIndex((i) => (i > 0 ? i - 1 : i))
+              }
+            >
+              ←
+            </button>
+
+            <button
+              className="media-nav next"
+              onClick={() =>
+                setSelectedIndex((i) =>
+                  i < filteredMedia.length - 1 ? i + 1 : i
+                )
+              }
+            >
+              →
+            </button>
+
+            {/* Preview */}
+            <div className="media-modal-preview">
+              {selectedMedia.resource_type === "image" ? (
+                <img src={selectedMedia.preview_url} alt="" />
+              ) : (
+                <video src={selectedMedia.preview_url} controls />
+              )}
+            </div>
+
+            {/* Info */}
+            <div className="media-modal-info">
+              <div className="media-modal-price">
+                ${selectedMedia.price}
+              </div>
+
+              <div className="media-modal-meta">
+                {selectedMedia.width && selectedMedia.height && (
+                  <>
+                    Resolución: {selectedMedia.width} ×{" "}
+                    {selectedMedia.height}px
+                    <br />
+                  </>
+                )}
+                Formato: {selectedMedia.format?.toUpperCase()}
+              </div>
+
+              <p className="media-modal-note">
+                Archivo sin marca de agua y en alta resolución.
+              </p>
+
+              <div className="media-modal-actions">
+                <button
+                  className="media-modal-btn primary"
+                  onClick={() => {
+                    const inCart = cart.find(
+                      (i) => i._id === selectedMedia._id
+                    );
+                    inCart
+                      ? removeItem(selectedMedia._id)
+                      : addItem(selectedMedia);
+                  }}
+                >
+                  {cart.find((i) => i._id === selectedMedia._id)
+                    ? "Quitar del carrito"
+                    : "Agregar al carrito"}
+                </button>
+
+                <button
+                  className="media-modal-btn secondary"
+                  onClick={() => setSelectedIndex(null)}
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
