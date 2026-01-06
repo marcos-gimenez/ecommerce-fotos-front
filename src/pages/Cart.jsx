@@ -1,59 +1,65 @@
 import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
+import "../styles/cart.css";
 
 export default function Cart() {
   const { cart, removeItem, total } = useCart();
 
   if (cart.length === 0) {
     return (
-      <div style={{ maxWidth: 800, margin: "40px auto" }}>
-        <h2>Carrito</h2>
-        <p>No hay items en el carrito.</p>
-        <Link to="/">Volver a eventos</Link>
+      <div className="cart-container">
+        <h2 className="cart-title">Carrito</h2>
+        <p className="cart-empty">No hay archivos en el carrito.</p>
+        <Link to="/" className="cart-back">
+          Volver a eventos
+        </Link>
       </div>
     );
   }
 
   return (
-    <div style={{ maxWidth: 900, margin: "40px auto" }}>
-      <h2>Carrito</h2>
+    <div className="cart-container">
+      <h2 className="cart-title">Carrito</h2>
 
-      {cart.map((item) => (
-        <div
-          key={item._id}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 16,
-            borderBottom: "1px solid #ddd",
-            padding: "12px 0",
-          }}
-        >
-          {item.resource_type === "image" ? (
-            <img
-              src={item.secure_url}
-              alt=""
-              style={{ width: 120, height: 80, objectFit: "cover" }}
-            />
-          ) : (
-            <video src={item.secure_url} style={{ width: 120, height: 80 }} />
-          )}
+      <div className="cart-list">
+        {cart.map((item) => (
+          <div key={item._id} className="cart-item">
+            <div
+              className="cart-preview"
+              onContextMenu={(e) => e.preventDefault()}
+            >
+              {item.resource_type === "image" ? (
+                <img
+                  src={item.preview_url}
+                  alt=""
+                  draggable={false}
+                />
+              ) : (
+                <video src={item.preview_url} />
+              )}
+            </div>
 
-          <div style={{ flex: 1 }}>
-            <p>💰 ${item.price}</p>
+            <div className="cart-info">
+              <div className="cart-price">💰 ${item.price}</div>
+
+              <button
+                className="cart-remove"
+                onClick={() => removeItem(item._id)}
+              >
+                Eliminar
+              </button>
+            </div>
           </div>
+        ))}
+      </div>
 
-          <button onClick={() => removeItem(item._id)}>Eliminar</button>
-        </div>
-      ))}
+      <div className="cart-footer">
+        <div className="cart-total">Total: ${total}</div>
 
-      <h3>Total: ${total}</h3>
-
-      <Link to="/checkout">
-        <button style={{ marginTop: 20, padding: "10px 20px", fontSize: 16 }}>
+        <Link to="/checkout" className="cart-checkout-btn">
           Finalizar compra
-        </button>
-      </Link>
+        </Link>
+      </div>
     </div>
   );
 }

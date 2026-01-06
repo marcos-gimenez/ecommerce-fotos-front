@@ -24,6 +24,43 @@ export default function EventDetail() {
       });
   }, [id]);
 
+  useEffect(() => {
+  if (selectedIndex === null) return;
+
+  const handleKeyDown = (e) => {
+    // Bloquear Ctrl / Cmd
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+    }
+
+    // Bloquear PrintScreen
+    if (e.key === "PrintScreen") {
+      e.preventDefault();
+    }
+
+    // Navegar →
+    if (e.key === "ArrowRight") {
+      setSelectedIndex((i) =>
+        i < media.length - 1 ? i + 1 : i
+      );
+    }
+
+    // Navegar ←
+    if (e.key === "ArrowLeft") {
+      setSelectedIndex((i) => (i > 0 ? i - 1 : i));
+    }
+
+    // Cerrar
+    if (e.key === "Escape") {
+      setSelectedIndex(null);
+    }
+  };
+
+  window.addEventListener("keydown", handleKeyDown);
+  return () => window.removeEventListener("keydown", handleKeyDown);
+}, [selectedIndex, media.length]);
+
+
   if (!event) return <p>Cargando evento...</p>;
 
   // 📁 Carpetas
@@ -130,10 +167,12 @@ export default function EventDetail() {
         <div
           className="media-modal-overlay"
           onClick={() => setSelectedIndex(null)}
+          onContextMenu={(e) => e.preventDefault()}
         >
           <div
             className="media-modal"
             onClick={(e) => e.stopPropagation()}
+            onContextMenu={(e) => e.preventDefault()}
           >
             <button
               className="media-modal-close"
@@ -165,10 +204,11 @@ export default function EventDetail() {
 
             {/* Preview */}
             <div className="media-modal-preview">
+              <span className="media-protected">Preview protegida</span>
               {selectedMedia.resource_type === "image" ? (
-                <img src={selectedMedia.preview_url} alt="" />
+                <img src={selectedMedia.preview_url} draggable={false} onContextMenu={(e) => e.preventDefault()} alt="" />
               ) : (
-                <video src={selectedMedia.preview_url} controls />
+                <video src={selectedMedia.preview_url} controls onContextMenu={(e) => e.preventDefault()}/>
               )}
             </div>
 
@@ -190,28 +230,28 @@ export default function EventDetail() {
               </div>
 
               <p className="media-modal-note">
-                Archivo sin marca de agua y en alta resolución.
+                Archivo a descargar sin marca de agua y en alta resolución.
               </p>
 
               <div className="media-modal-actions">
                 <button
-                  className="media-modal-btn primary"
-                  onClick={() => {
-                    const inCart = cart.find(
-                      (i) => i._id === selectedMedia._id
-                    );
-                    inCart
-                      ? removeItem(selectedMedia._id)
-                      : addItem(selectedMedia);
-                  }}
-                >
-                  {cart.find((i) => i._id === selectedMedia._id)
-                    ? "Quitar del carrito"
-                    : "Agregar al carrito"}
-                </button>
+  className={`media-btn ${
+    cart.find((i) => i._id === selectedMedia._id) ? "in-cart" : ""
+  }`}
+  onClick={() => {
+    const inCart = cart.find((i) => i._id === selectedMedia._id);
+    inCart
+      ? removeItem(selectedMedia._id)
+      : addItem(selectedMedia);
+  }}
+>
+  {cart.find((i) => i._id === selectedMedia._id)
+    ? "✓ En carrito"
+    : "🛒 Añadir"}
+</button>
 
                 <button
-                  className="media-modal-btn secondary"
+                  className="media-btn secondary"
                   onClick={() => setSelectedIndex(null)}
                 >
                   Cerrar

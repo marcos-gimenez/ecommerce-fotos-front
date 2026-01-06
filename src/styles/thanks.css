@@ -1,0 +1,150 @@
+/* =========================
+   THANKS
+========================= */
+
+.thanks-container {
+  max-width: 700px;
+  margin: 80px auto;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.thanks-title {
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.thanks-title.error {
+  color: #e74c3c;
+}
+
+.thanks-loading {
+  font-size: 16px;
+  color: var(--text-muted);
+}
+
+.thanks-text {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.thanks-order {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+/* =========================
+   NOTE
+========================= */
+
+.thanks-note {
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 32px;
+}
+
+.thanks-note p {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.thanks-warning {
+  font-size: 13px;
+  color: var(--warning);
+}
+
+/* =========================
+   DOWNLOADS
+========================= */
+
+.thanks-downloads {
+  margin-bottom: 32px;
+}
+
+.thanks-downloads h3 {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.thanks-downloads ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.thanks-downloads li {
+  margin-bottom: 10px;
+}
+
+.thanks-downloads a {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.thanks-downloads a:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.thanks-retry {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 10px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.thanks-retry:hover {
+  background: var(--accent);
+  color: white;
+}
+
+.thanks-back {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.thanks-back.primary {
+  margin-top: 24px;
+  background: var(--accent);
+  color: white;
+  padding: 12px 26px;
+  border-radius: 999px;
+}
+
+.thanks-back.primary:hover {
+  background: var(--accent-hover);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+  .thanks-container {
+    margin: 40px auto;
+  }
+
+  .thanks-title {
+    font-size: 24px;
+  }
+}

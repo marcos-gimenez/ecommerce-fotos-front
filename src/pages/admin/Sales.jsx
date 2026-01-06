@@ -29,6 +29,7 @@ export default function Sales() {
             <thead>
               <tr>
                 <th>Email</th>
+                <th>WhatsApp</th>
                 <th>Fecha</th>
                 <th>Total</th>
                 <th>Estado</th>
@@ -40,6 +41,16 @@ export default function Sales() {
               {orders.map((o) => (
                 <tr key={o._id}>
                   <td>{o.email}</td>
+                  <td>
+                    <a
+                      href={`https://wa.me/${o.phone}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="sales-whatsapp"
+                    >
+                      {o.phone}
+                    </a>
+                  </td>
                   <td>{new Date(o.createdAt).toLocaleString()}</td>
                   <td className="order-total">${o.total}</td>
                   <td>
@@ -81,9 +92,7 @@ export default function Sales() {
 
                 <div className="row">
                   <span>Estado</span>
-                  <span className={`order-status ${o.status}`}>
-                    {o.status}
-                  </span>
+                  <span className={`order-status ${o.status}`}>{o.status}</span>
                 </div>
 
                 <button
