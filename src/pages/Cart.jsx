@@ -11,7 +11,7 @@ export default function Cart() {
         <h2 className="cart-title">Carrito</h2>
         <p className="cart-empty">No hay archivos en el carrito.</p>
         <Link to="/" className="cart-back">
-          Volver a eventos
+          Volver a página principal
         </Link>
       </div>
     );

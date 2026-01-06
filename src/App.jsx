@@ -16,7 +16,6 @@
 // import SaleDetail from './pages/admin/SaleDetail';
 // import CreateEventPage from "./pages/admin/CreateEventPage";
 
-
 // import "./styles/theme.css";
 
 // function App() {
@@ -42,7 +41,6 @@
 //           <Route path="/admin/sales" element={<SalesPage />} />
 //           <Route path="/admin/sales/:id" element={<SaleDetail />} />
 //           <Route path="/admin/create-event" element={<CreateEventPage />} />
-
 
 //         </Routes>
 
@@ -71,6 +69,8 @@ import EventDetail from "./pages/EventDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Thanks from "./pages/Thanks";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
 
 /* Admin */
 import AdminLogin from "./pages/admin/Login";
@@ -116,6 +116,8 @@ export default function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/thanks/:orderId" element={<Thanks />} />
+          <Route path="/terminos" element={<Terms />} />
+          <Route path="/privacidad" element={<Privacy />} />
 
           {/* =======================
               Admin

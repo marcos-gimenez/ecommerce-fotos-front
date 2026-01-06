@@ -116,7 +116,7 @@ export default function Events() {
           INTRO
       ========================= */}
       <div className="events-intro">
-        <h1 className="page-title">Eventos</h1>
+        <h1 className="page-title">Pampa Foto · Registros</h1>
         <p className="events-phrase">
           Volvé a vivir ese instante.<br />
           La emoción del momento, convertida en recuerdo.

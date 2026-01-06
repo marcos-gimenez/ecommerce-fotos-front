@@ -1,0 +1,37 @@
+.legal-container {
+  max-width: 900px;
+  margin: 80px auto;
+  padding: 0 24px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.legal-container h1 {
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+.legal-container h2 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 32px 0 12px;
+  color: var(--text-primary);
+}
+
+.legal-container p {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .legal-container {
+    margin: 40px auto;
+  }
+
+  .legal-container h1 {
+    font-size: 24px;
+  }
+}
