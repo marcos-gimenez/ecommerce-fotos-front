@@ -10,9 +10,9 @@ export default function Footer() {
           <div className="footer-block">
             <h4 className="footer-title">PAMPA FOTO</h4>
             <p className="footer-text">
-              Volvé a vivir ese instante.
+              Fotografía natural.
               <br />
-              La emoción del momento, convertida en recuerdo.
+              Capturamos momentos efímeros.
             </p>
           </div>
 
@@ -23,24 +23,24 @@ export default function Footer() {
             <div className="footer-contact-list">
               <div className="footer-contact-item">
                 <span className="footer-icon">📧</span>
-                <span>contacto@pampafoto.com</span>
+                <span>pampafotografia24@gmail.com</span>
               </div>
 
               <div className="footer-contact-item">
                 <span className="footer-icon">📱</span>
                 <a
-                  href="https://wa.me/5491100000000"
+                  href="https://wa.me/5493364298572"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  +54 9 11 0000-0000
+                  +54 9 336 429-8572
                 </a>
               </div>
 
               <div className="footer-contact-item instagram">
                 <span className="footer-icon">📸</span>
                 <a
-                  href="https://instagram.com/pampafoto"
+                  href="https://instagram.com/pampa.foto"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
