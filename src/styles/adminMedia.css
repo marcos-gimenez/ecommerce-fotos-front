@@ -18,13 +18,17 @@
 /* Delete event */
 .event-delete-btn {
   margin-bottom: 16px;
-  background: transparent;
+  background: #c0392b;
   border: 1px solid #c0392b;
-  color: #c0392b;
+  color: white;
   padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
   transition: opacity 0.2s ease;
+}
+
+.event-delete-btn:hover{
+  background: #8f2f24;
 }
 
 .event-delete-btn:disabled {
@@ -58,6 +62,7 @@
   border: 1px solid var(--border-soft);
   border-radius: 8px;
   padding: 8px;
+  margin-bottom: 16px;
 }
 
 .admin-media-card img,
@@ -132,15 +137,16 @@
   border-color: var(--accent);
 }
 
-.folder-delete-btn {
+.admin-folders .folder-delete-btn {
   margin-left: auto;
-  background: transparent;
+  background: #c0392b;
   border: 1px solid #c0392b;
-  color: #c0392b;
-  padding: 6px 12px;
-  border-radius: 999px;
-  cursor: pointer;
+  color: white;
 }
+.admin-folders .folder-delete-btn:hover{
+  background: #9b3227;
+}
+
 
 .event-edit {
   margin: 20px 0;

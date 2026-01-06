@@ -80,6 +80,13 @@ export default function Sales() {
                   <span>{o.email}</span>
                 </div>
 
+                {o.phone && (
+                  <div className="row">
+                    <span>WhatsApp</span>
+                    <span>{o.phone}</span>
+                  </div>
+                )}
+
                 <div className="row">
                   <span>Fecha</span>
                   <span>{new Date(o.createdAt).toLocaleString()}</span>

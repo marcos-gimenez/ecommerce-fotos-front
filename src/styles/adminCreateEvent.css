@@ -16,14 +16,28 @@
   resize: vertical;
 }
 
+.admin-create-event button {
+    width: 100%;
+    margin-top: 8px;
+    background: var(--accent);
+    border: none;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: background 0.25s ease, transform 0.2s ease;
+  }
+  .admin-create-event button:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+  }
+
 /* Mobile */
 @media (max-width: 768px) {
   .admin-create-event {
     margin: 20px auto;
     padding: 0 12px;
-  }
-
-  .admin-create-event button {
-    width: 100%;
-  }
+  } 
 }
