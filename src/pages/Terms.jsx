@@ -31,7 +31,15 @@ export default function Terms() {
 
       <h2>Contacto</h2>
       <p>
-        Ante cualquier duda podés comunicarte vía WhatsApp.
+        Ante cualquier duda podés comunicarte vía WhatsApp{" "}
+        <a
+          href="https://wa.me/5493364298572"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          +54 9 336 429-8572
+        </a>
+        .
       </p>
     </div>
   );

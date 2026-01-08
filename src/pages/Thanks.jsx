@@ -167,9 +167,8 @@ export default function Thanks() {
 
       {/* ✅ NUEVO MENSAJE */}
       <p className="thanks-text">
-        También te enviamos estos links por <strong>mail</strong> y
-        <strong> WhatsApp</strong>.
-      </p>
+        También te enviamos estos links por <strong>mail</strong>.        
+      </p> {/*falta agregar esto: y <strong> WhatsApp</strong>. */}
 
       <div className="thanks-note">
         <p>

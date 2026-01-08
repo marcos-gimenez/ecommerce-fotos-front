@@ -209,7 +209,8 @@ export default function Checkout() {
           </div>
 
           <small className="phone-help">
-            Te enviaremos los links por WhatsApp y email
+            Te enviaremos los links por email
+            {/* falta agregar WhatsApp */}
           </small>
         </div>
 

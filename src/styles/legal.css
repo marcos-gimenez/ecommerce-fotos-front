@@ -35,3 +35,12 @@
     font-size: 24px;
   }
 }
+
+.legal-container a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.legal-container a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}

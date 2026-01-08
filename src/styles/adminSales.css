@@ -175,3 +175,57 @@
   background: #25d366;
   color: black;
 }
+
+/* =========================
+   SALES – FILTERS
+========================= */
+
+.sales-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.sales-filter-input,
+.sales-filter-select {
+  background: #0e0e0e;
+  border: 1px solid var(--border-soft);
+  color: var(--text-primary);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.sales-filter-input {
+  min-width: 220px;
+}
+
+.sales-filter-input::placeholder {
+  color: var(--text-muted);
+}
+
+.sales-filter-input:focus,
+.sales-filter-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #111;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+  .sales-filters {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .sales-filter-input,
+  .sales-filter-select {
+    width: 100%;
+    font-size: 16px; /* evita zoom en iOS */
+  }
+}
