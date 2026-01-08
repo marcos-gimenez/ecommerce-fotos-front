@@ -1,3 +1,7 @@
+/* =========================
+   PAGE HEADER
+========================= */
+
 .page-title {
   font-size: 28px;
   font-weight: 500;
@@ -10,7 +14,6 @@
   margin-bottom: 12px;
 }
 
-
 .back-btn {
   padding: 20px;
   background: none;
@@ -21,6 +24,10 @@
   margin-bottom: 16px;
 }
 
+/* =========================
+   SECTION TITLES
+========================= */
+
 .section-title {
   margin: 32px 0 16px;
   font-size: 18px;
@@ -28,8 +35,15 @@
   font-weight: 400;
 }
 
+.folder-count {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-left: 6px;
+}
+
 /* =========================
-   FOLDERS FILTER
+   FOLDER FILTERS
 ========================= */
 
 .folder-filters {
@@ -46,7 +60,6 @@
   padding: 6px 14px;
   border-radius: 999px;
   font-size: 13px;
-  font-weight: 400;
   cursor: pointer;
   transition: all 0.25s ease;
 }
@@ -62,17 +75,24 @@
   color: white;
 }
 
+/* =========================
+   MEDIA GRID
+========================= */
 
 .media-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); /* 👈 más grande */
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 24px;
 }
+
+/* =========================
+   MEDIA CARD
+========================= */
 
 .media-card {
   position: relative;
   aspect-ratio: 4 / 5;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   background: var(--bg-card);
 }
@@ -81,11 +101,11 @@
 .media-card video {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 👈 CLAVE */
+  object-fit: cover;
   display: block;
-  pointer-events: none; /* 🚫 arrastrar */
+  pointer-events: none;
   filter: contrast(0.95) brightness(0.85);
-  transition: transform 0.6s ease, filter 0.3s ease;
+  transition: transform 0.6s ease;
 }
 
 .media-card:hover img,
@@ -93,14 +113,36 @@
   transform: scale(1.03);
 }
 
-.media-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.9);
+/* =========================
+   GRID WATERMARK (CSS ONLY)
+========================= */
+
+.media-card::after {
+  content: "PAMPA FOTO · USO NO AUTORIZADO";
+  position: absolute;
+  inset: -50%;
+  pointer-events: none;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  gap: 60px 120px;
+
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.18);
+
+  transform: rotate(-30deg);
+  user-select: none;
 }
 
-/* Overlay hover */
+/* =========================
+   HOVER OVERLAY
+========================= */
+
 .media-overlay {
   position: absolute;
   inset: 0;
@@ -112,9 +154,10 @@
   );
   opacity: 0;
   transition: opacity 0.3s ease;
+
   display: flex;
-  align-items: flex-end;        /* abajo */
-  justify-content: space-between; /* izquierda / derecha */
+  align-items: flex-end;
+  justify-content: space-between;
   padding: 20px;
 }
 
@@ -123,30 +166,27 @@
 }
 
 .media-price {
-  color: rgba(255,255,255,0.8);
+  color: rgba(255,255,255,0.85);
   font-size: 14px;
-  font-weight: 400;
-  margin-bottom: 5px;
 }
 
+/* =========================
+   BUTTONS
+========================= */
+
 .media-btn {
-  align-self: flex-end;
   padding: 8px 18px;
   border-radius: 999px;
   border: none;
   font-size: 13px;
   cursor: pointer;
-  background: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.9);
   color: black;
-  transition: transform 0.2s ease, background 0.2s ease;  
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .media-btn:hover {
   background: white;
-}
-
-.media-card:hover .media-btn {
-  transform: translateY(-2px);
 }
 
 .media-btn.in-cart {
@@ -158,131 +198,17 @@
   outline: 2px solid var(--accent);
 }
 
-.media-card.selected::after {
-  content: "EN CARRITO";
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: rgba(76,175,80,0.9);
-  color: white;
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: 999px;
-}
-
+/* =========================
+   MOBILE
+========================= */
 
 @media (max-width: 768px) {
   .media-grid {
-    padding: 0 12px;      /* 👈 aire lateral */
-    gap: 16px;            /* un poco menos de espacio */
+    gap: 16px;
+    padding: 0 12px;
   }
 
   .media-card {
-    border-radius: 12px;  /* se ve mejor en mobile */
-  }
-}
-
-.folder-count {
-  font-size: 13px;
-  color: var(--text-muted);
-  font-weight: 400;
-  margin-left: 6px;
-}
-
-/* =========================
-   MODAL PREVIEW
-========================= */
-
-.media-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.75);
-  z-index: 999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-}
-
-.media-modal {
-  background: #0b0b0b;
-  border-radius: 14px;
-  max-width: 900px;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 24px;
-  padding: 24px;
-  position: relative;
-}
-
-.modal-close {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.modal-preview img,
-.modal-preview video {
-  width: 100%;
-  height: 100%;
-  max-height: 70vh;
-  object-fit: contain;
-  border-radius: 10px;
-}
-
-.modal-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 14px;
-}
-
-.modal-price {
-  font-size: 28px;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.modal-meta {
-  font-size: 13px;
-  color: var(--text-secondary);
-}
-
-.modal-note {
-  font-size: 14px;
-  color: var(--text-muted);
-}
-
-.modal-cart-btn {
-  margin-top: 12px;
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 999px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.modal-cart-btn:hover {
-  background: var(--accent-hover);
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .media-modal {
-    grid-template-columns: 1fr;
-    padding: 16px;
-  }
-
-  .modal-preview img,
-  .modal-preview video {
-    max-height: 50vh;
+    border-radius: 14px;
   }
 }

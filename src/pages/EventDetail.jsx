@@ -13,8 +13,11 @@ export default function EventDetail() {
   const { addItem, removeItem, cart } = useCart();
 
   const [activeFolder, setActiveFolder] = useState("Todas");
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedMedia, setSelectedMedia] = useState(null);
 
+  // ===============================
+  // Fetch evento + media
+  // ===============================
   useEffect(() => {
     fetch(`${API_URL}/events/${id}`)
       .then((res) => res.json())
@@ -24,62 +27,56 @@ export default function EventDetail() {
       });
   }, [id]);
 
+  // ===============================
+  // Teclado (modal)
+  // ===============================
   useEffect(() => {
-  if (selectedIndex === null) return;
+    if (!selectedMedia) return;
 
-  const handleKeyDown = (e) => {
-    // Bloquear Ctrl / Cmd
-    if (e.ctrlKey || e.metaKey) {
-      e.preventDefault();
-    }
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey || e.metaKey) e.preventDefault();
+      if (e.key === "PrintScreen") e.preventDefault();
 
-    // Bloquear PrintScreen
-    if (e.key === "PrintScreen") {
-      e.preventDefault();
-    }
+      const index = filteredMedia.findIndex((m) => m._id === selectedMedia._id);
 
-    // Navegar →
-    if (e.key === "ArrowRight") {
-      setSelectedIndex((i) =>
-        i < media.length - 1 ? i + 1 : i
-      );
-    }
+      if (e.key === "ArrowRight" && index < filteredMedia.length - 1) {
+        setSelectedMedia(filteredMedia[index + 1]);
+      }
 
-    // Navegar ←
-    if (e.key === "ArrowLeft") {
-      setSelectedIndex((i) => (i > 0 ? i - 1 : i));
-    }
+      if (e.key === "ArrowLeft" && index > 0) {
+        setSelectedMedia(filteredMedia[index - 1]);
+      }
 
-    // Cerrar
-    if (e.key === "Escape") {
-      setSelectedIndex(null);
-    }
-  };
+      if (e.key === "Escape") {
+        setSelectedMedia(null);
+      }
+    };
 
-  window.addEventListener("keydown", handleKeyDown);
-  return () => window.removeEventListener("keydown", handleKeyDown);
-}, [selectedIndex, media.length]);
-
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedMedia, media]);
 
   if (!event) return <p>Cargando evento...</p>;
 
-  // 📁 Carpetas
+  // ===============================
+  // Carpetas
+  // ===============================
   const folders = [
     "Todas",
     ...new Set(media.map((m) => m.folder || "General")),
   ];
 
-  // 🔍 Media filtrada
+  // ===============================
+  // Media filtrada
+  // ===============================
   const filteredMedia =
     activeFolder === "Todas"
       ? media
       : media.filter((m) => (m.folder || "General") === activeFolder);
 
-  // 🎯 Media seleccionada
-  const selectedMedia =
-    selectedIndex !== null ? filteredMedia[selectedIndex] : null;
-
-  // Agrupado por carpeta
+  // ===============================
+  // Agrupar por carpeta
+  // ===============================
   const grouped = filteredMedia.reduce((acc, m) => {
     const folder = m.folder || "General";
     acc[folder] = acc[folder] || [];
@@ -95,11 +92,9 @@ export default function EventDetail() {
       </button>
 
       <h1 className="page-title">{event.title}</h1>
-      <p className="event-date">
-        {new Date(event.date).toLocaleDateString()}
-      </p>
+      <p className="event-date">{new Date(event.date).toLocaleDateString()}</p>
 
-      {/* 📁 Filtros */}
+      {/* Filtros */}
       <div className="folder-filters">
         {folders.map((folder) => (
           <button
@@ -112,7 +107,7 @@ export default function EventDetail() {
         ))}
       </div>
 
-      {/* 🖼️ Media */}
+      {/* Media */}
       {Object.entries(grouped).map(([folderName, items]) => (
         <div key={folderName}>
           <h2 className="section-title">
@@ -122,16 +117,13 @@ export default function EventDetail() {
 
           <div className="media-grid">
             {items.map((m) => {
-              const index = filteredMedia.findIndex(
-                (x) => x._id === m._id
-              );
               const inCart = cart.find((i) => i._id === m._id);
 
               return (
                 <div
                   key={m._id}
                   className={`media-card ${inCart ? "selected" : ""}`}
-                  onClick={() => setSelectedIndex(index)}
+                  onClick={() => setSelectedMedia(m)}
                   onContextMenu={(e) => e.preventDefault()}
                 >
                   {m.resource_type === "image" ? (
@@ -160,13 +152,13 @@ export default function EventDetail() {
         </div>
       ))}
 
-      {/* =========================
-         MODAL
-      ========================= */}
+      {/* ===============================
+          MODAL
+      =============================== */}
       {selectedMedia && (
         <div
           className="media-modal-overlay"
-          onClick={() => setSelectedIndex(null)}
+          onClick={() => setSelectedMedia(null)}
           onContextMenu={(e) => e.preventDefault()}
         >
           <div
@@ -176,7 +168,7 @@ export default function EventDetail() {
           >
             <button
               className="media-modal-close"
-              onClick={() => setSelectedIndex(null)}
+              onClick={() => setSelectedMedia(null)}
             >
               ✕
             </button>
@@ -184,45 +176,63 @@ export default function EventDetail() {
             {/* Flechas */}
             <button
               className="media-nav prev"
-              onClick={() =>
-                setSelectedIndex((i) => (i > 0 ? i - 1 : i))
-              }
+              onClick={() => {
+                const i = filteredMedia.findIndex(
+                  (m) => m._id === selectedMedia._id
+                );
+                if (i > 0) setSelectedMedia(filteredMedia[i - 1]);
+              }}
             >
               ←
             </button>
 
             <button
               className="media-nav next"
-              onClick={() =>
-                setSelectedIndex((i) =>
-                  i < filteredMedia.length - 1 ? i + 1 : i
-                )
-              }
+              onClick={() => {
+                const i = filteredMedia.findIndex(
+                  (m) => m._id === selectedMedia._id
+                );
+                if (i < filteredMedia.length - 1)
+                  setSelectedMedia(filteredMedia[i + 1]);
+              }}
             >
               →
             </button>
 
             {/* Preview */}
-            <div className="media-modal-preview">
+            {/* <div className="media-modal-preview"> */}
+            <div
+              className={`media-modal-preview ${
+                selectedMedia.width > selectedMedia.height
+                  ? "horizontal"
+                  : "vertical"
+              }`}
+            >
               <span className="media-protected">Preview protegida</span>
+
               {selectedMedia.resource_type === "image" ? (
-                <img src={selectedMedia.preview_url} draggable={false} onContextMenu={(e) => e.preventDefault()} alt="" />
+                <img src={selectedMedia.preview_url} draggable={false} alt="" />
               ) : (
-                <video src={selectedMedia.preview_url} controls onContextMenu={(e) => e.preventDefault()}/>
+                <video src={selectedMedia.preview_url} controls />
               )}
             </div>
 
             {/* Info */}
             <div className="media-modal-info">
-              <div className="media-modal-price">
-                ${selectedMedia.price}
-              </div>
+              <div className="media-modal-price">${selectedMedia.price}</div>
 
               <div className="media-modal-meta">
                 {selectedMedia.width && selectedMedia.height && (
                   <>
-                    Resolución: {selectedMedia.width} ×{" "}
-                    {selectedMedia.height}px
+                    Resolución: {selectedMedia.width}px × {selectedMedia.height}
+                    px
+                    <br />
+                    Orientación:{" "}
+                    {selectedMedia.width > selectedMedia.height
+                      ? "Horizontal"
+                      : selectedMedia.height > selectedMedia.width
+                      ? "Vertical"
+                      : "Cuadrada"}
                     <br />
                   </>
                 )}
@@ -235,24 +245,28 @@ export default function EventDetail() {
 
               <div className="media-modal-actions">
                 <button
-  className={`media-btn ${
-    cart.find((i) => i._id === selectedMedia._id) ? "in-cart" : ""
-  }`}
-  onClick={() => {
-    const inCart = cart.find((i) => i._id === selectedMedia._id);
-    inCart
-      ? removeItem(selectedMedia._id)
-      : addItem(selectedMedia);
-  }}
->
-  {cart.find((i) => i._id === selectedMedia._id)
-    ? "✓ En carrito"
-    : "🛒 Añadir"}
-</button>
+                  className={`media-btn ${
+                    cart.find((i) => i._id === selectedMedia._id)
+                      ? "in-cart"
+                      : ""
+                  }`}
+                  onClick={() => {
+                    const inCart = cart.find(
+                      (i) => i._id === selectedMedia._id
+                    );
+                    inCart
+                      ? removeItem(selectedMedia._id)
+                      : addItem(selectedMedia);
+                  }}
+                >
+                  {cart.find((i) => i._id === selectedMedia._id)
+                    ? "✓ En carrito"
+                    : "🛒 Añadir"}
+                </button>
 
                 <button
                   className="media-btn secondary"
-                  onClick={() => setSelectedIndex(null)}
+                  onClick={() => setSelectedMedia(null)}
                 >
                   Cerrar
                 </button>
