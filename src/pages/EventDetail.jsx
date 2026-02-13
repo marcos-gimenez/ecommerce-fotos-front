@@ -93,6 +93,9 @@ export default function EventDetail() {
 
       <h1 className="page-title">{event.title}</h1>
       <p className="event-date">{new Date(event.date).toLocaleDateString()}</p>
+      {event.description && (
+        <p className="event-description">{event.description}</p>
+      )}
 
       {/* Filtros */}
       <div className="folder-filters">
